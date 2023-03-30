@@ -12,7 +12,7 @@ db.init_app(app)
 
 @app.route("/")
 def index():
-    return 'poner /id_usuario :)'
+    return 'poner /tracker/"id_del_usuario" :)'
 
 @app.route("/tracker/<id_usuario>", methods=['GET'])
 def tracker(id_usuario):
@@ -40,12 +40,19 @@ def tracker(id_usuario):
 
     return render_template('base.html', usuario=usuario, ingresos=ingresos, gastos=gastos, ahorros=ahorros, saldo_total=saldo_total, gastos_totales=gastos_totales)
 
-@app.route("/agregar_ingreso/<id_usuario>")
+@app.route("/agregar_ingreso/<id_usuario>", methods=["POST"])
 def agregar_ingreso(id_usuario):
+    ingreso_reciente = request.form['ingreso_reciente']
+    razon_ingreso = request.form['razon_ingreso']
+    # ingreso_gasto = request.form['fecha_ingreso']
 
-    return 'enviado'
+    ingreso = Ingresos(id_usuario=id_usuario, ingreso_reciente=ingreso_reciente, razon_ingreso=razon_ingreso)
+    db.session.add(ingreso)
+    db.session.commit()
+    return redirect(url_for('tracker', id_usuario=id_usuario))
 
-@app.route("/agregar_gasto/<id_usuario>", methods=["POST", "GET"])
+
+@app.route("/agregar_gasto/<id_usuario>", methods=["POST"])
 def agregar_gastos(id_usuario):
     gasto_reciente = request.form['gasto_reciente']
     razon_gasto = request.form['razon_gasto']
@@ -60,9 +67,14 @@ def agregar_gastos(id_usuario):
 def editar(id_usuario):
     return 'editar'
 
-@app.route("/eliminar/<id_usuario>")
-def borrar(id_usuario):
-    return 'borrar'
+
+
+# Eliminar gasto o ingreso
+@app.route("/eliminar/<id_usuario>/<id_gasto>", methods=['POST', 'GET'])
+def borrar(id_usuario, id_gasto):
+
+    gasto_eliminar = Gastos.query.get(id_gasto)
+    return 'eliminar gasto usuario'
     
 
     
