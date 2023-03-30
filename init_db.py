@@ -20,16 +20,16 @@ with app.app_context():
 
 ########################
 
-with app.app_context():
-    usuario = Usuario(nombre='Rodrigo', apellido='Vallejos', correo='rorro@gmai.com', password='123123')
-    ingreso = Ingresos(id_usuario=1, ingreso_reciente=60000, razon_ingreso='brownies')
-    gasto = Gastos(id_usuario=1, gasto_reciente=2000, razon_gasto='empanada')
-    ahorro = Ahorro(id_usuario=1, monto_ahorro=200000, razon_ahorro='viaje') 
+# with app.app_context():
+#     usuario = Usuario(nombre='Rodrigo', apellido='Vallejos', correo='rorro@gmai.com', password='123123')
+    # ingreso = Ingresos(id_usuario=1, ingreso_reciente=25000, razon_ingreso='venta chat_gpt')
+#     gasto = Gastos(id_usuario=1, gasto_reciente=2000, razon_gasto='empanada')
+#     ahorro = Ahorro(id_usuario=1, monto_ahorro=200000, razon_ahorro='viaje') 
 
-    db.session.add(usuario)
-    db.session.add(ingreso)
-    db.session.add(gasto)
-    db.session.add(ahorro)
+#     db.session.add(usuario)
+    # db.session.add(ingreso)
+#     db.session.add(gasto)
+#     db.session.add(ahorro)
 
-    db.session.commit()
+    # db.session.commit()
     
