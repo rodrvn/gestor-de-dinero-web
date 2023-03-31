@@ -69,12 +69,28 @@ def editar(id_usuario):
 
 
 
-# Eliminar gasto o ingreso
-@app.route("/eliminar/<id_usuario>/<id_gasto>", methods=['POST', 'GET'])
-def borrar(id_usuario, id_gasto):
+# Eliminar gasto
+@app.route("/eliminar_g/<id_usuario>/<id_gasto>", methods=['POST','GET'])
+def eliminar_gasto(id_usuario, id_gasto):
 
-    gasto_eliminar = Gastos.query.get(id_gasto)
-    return 'eliminar gasto usuario'
+    gasto_eliminar = Gastos.query.filter_by(id_usuario=id_usuario, id=id_gasto).first()
+
+    db.session.delete(gasto_eliminar)
+    db.session.commit()
+
+    return redirect(url_for('tracker', id_usuario=id_usuario))
+
+# Eliminar ingreso
+@app.route("/eliminar_i/<id_usuario>/<id_ingreso>", methods=['GET','POST'])
+def eliminar_ingreso(id_usuario, id_ingreso):
+
+    ingreso_eliminar = Ingresos.query.filter_by(id_usuario=id_usuario, id=id_ingreso).first()
+
+    db.session.delete(ingreso_eliminar)
+    db.session.commit()
+
+    return redirect(url_for('tracker', id_usuario=id_usuario))
+
     
 
     

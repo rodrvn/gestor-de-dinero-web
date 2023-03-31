@@ -510,11 +510,12 @@
                           <a href="">editar</a>
                         </td>
 
-                        <form method="post"  action=" {{ url_for }}">
-                          <td class="whitespace-nowrap px-6 py-4 text-right text-sm text-gray-500">
-                            <a href="">eliminar</a>
-                          </td>
-                        </form>
+                        <!-- eliminar -->
+                        
+                        <td class="whitespace-nowrap px-6 py-4 text-right text-sm text-gray-500">
+                          <a href="{{ url_for('eliminar_gasto',id_usuario=usuario.id_usuario, id_gasto=gasto.id) }}">eliminar</a>
+                        </td>
+                        
                         <!-- Termina Opciones -->
 
                       </tr>
@@ -645,8 +646,10 @@
                           <a href="">editar</a>
                         </td>
 
+                        <!-- eliminar -->
+
                         <td class="whitespace-nowrap px-6 py-4 text-right text-sm text-gray-500">
-                          <a href="">eliminar</a>
+                          <a href="{{ url_for('eliminar_ingreso', id_usuario=usuario.id_usuario, id_ingreso=ingreso.id) }}">eliminar</a>
                         </td>
                         <!-- Termina Opciones -->
                       </tr>
