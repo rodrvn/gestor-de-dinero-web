@@ -91,6 +91,24 @@ def eliminar_ingreso(id_usuario, id_ingreso):
 
     return redirect(url_for('tracker', id_usuario=id_usuario))
 
+
+@app.route("/tracker/editar/<id_usuario>/<id_gasto>", methods=['GET', 'POST'])
+def editar_gasto(id_usuario, id_gasto):
+
+    gasto_editar = Gastos.query.filter_by(id_usuario=id_usuario, id=id_gasto).first()
+
+    #Si el metodo es Post actualiza
+    if request.method == 'POST':
+        gasto_editar.razon_gasto = request.form["razon_gasto"]
+        gasto_editar.gasto_reciente = request.form["gasto_reciente"]
+        gasto_editar.fecha = request.form["fecha_gasto"]
+
+        db.session.commit()
+        return redirect(url_for("tracker", id_usuario=id_usuario))
+    #Si es GET, nos da los datos que necesitamos
+    
+    return render_template('edit.html', gasto_editar=gasto_editar)
+
     
 
     
