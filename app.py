@@ -38,7 +38,7 @@ def tracker(id_usuario):
     print(saldo_total)
     
 
-    return render_template('base.html', usuario=usuario, ingresos=ingresos, gastos=gastos, ahorros=ahorros, saldo_total=saldo_total, gastos_totales=gastos_totales)
+    return render_template('tracker.html', usuario=usuario, ingresos=ingresos, gastos=gastos, ahorros=ahorros, saldo_total=saldo_total, gastos_totales=gastos_totales)
 
 @app.route("/agregar_ingreso/<id_usuario>", methods=["POST"])
 def agregar_ingreso(id_usuario):
@@ -96,6 +96,7 @@ def eliminar_ingreso(id_usuario, id_ingreso):
 def editar_gasto(id_usuario, id_gasto):
 
     gasto_editar = Gastos.query.filter_by(id_usuario=id_usuario, id=id_gasto).first()
+    usuario = Usuario.query.get(id_usuario)
 
     #Si el metodo es Post actualiza
     if request.method == 'POST':
@@ -107,7 +108,7 @@ def editar_gasto(id_usuario, id_gasto):
         return redirect(url_for("tracker", id_usuario=id_usuario))
     #Si es GET, nos da los datos que necesitamos
     
-    return render_template('edit.html', gasto_editar=gasto_editar)
+    return render_template('edit.html', gasto_editar=gasto_editar, usuario=usuario)
 
     
 
