@@ -2,9 +2,10 @@
 
 ## **Descripción de Pirapire Tracker**
 
-Descripcion:
 Pirapire Tracker es la solución perfecta para aquellos que quieren tener un control completo y efectivo de sus finanzas mensuales. Con esta herramienta podrás gestionar tus ingresos y gastos de manera eficiente y fácil de rastrear, permitiéndote tomar decisiones financieras más informadas y alcanzar tus metas económicas más rápidamente.
-# Documentación preliminar de Itaipu Saraki
+
+
+# Documentación de Pirapire Tracker
 
 
 ## **Tecnologías utilizadas para el desarrollo del proyecto:**
@@ -18,7 +19,10 @@ Pirapire Tracker es la solución perfecta para aquellos que quieren tener un con
 - JavaScript
 - HTML
 
+
 ## Instrucciones
+
+
 
 ### Para correr la aplicación primero debemos crear nuestro entorno virtual:
 
