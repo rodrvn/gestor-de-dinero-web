@@ -88,7 +88,7 @@ def eliminar_ingreso(id_usuario, id_ingreso):
     return redirect(url_for('tracker', id_usuario=id_usuario))
 
 
-@app.route("/tracker/editar/<id_usuario>/<id_gasto>", methods=['GET', 'POST'])
+@app.route("/tracker/editar-gasto/<id_usuario>/<id_gasto>", methods=['GET', 'POST'])
 def editar_gasto(id_usuario, id_gasto):
 
     usuario = Usuario.query.get(id_usuario)
@@ -105,7 +105,7 @@ def editar_gasto(id_usuario, id_gasto):
         return redirect(url_for("tracker", id_usuario=id_usuario))
     #Si es GET, nos da los datos que necesitamos
     
-    return render_template('edit.html', gasto_editar=gasto_editar, usuario=usuario)
+    return render_template('edit_gastos.html', gasto_editar=gasto_editar, usuario=usuario)
 
 @app.route("/tracker/editar-ingreso/<id_usuario>/<id_ingreso>", methods=['GET', 'POST'])
 def editar_ingreso(id_usuario, id_ingreso):
