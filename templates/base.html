@@ -33,7 +33,7 @@
   <body class="h-full">
   ```
 -->
-<div class="min-h-full">
+  <div class="min-h-full">
     <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
     <div class="relative z-40 lg:hidden" role="dialog" aria-modal="true">
       <!--
@@ -154,6 +154,7 @@
     </div>
   
     <!-- Static sidebar for desktop -->
+    
     <div class=" lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
       <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div class="hidden flex flex-grow flex-col overflow-y-auto bg-cyan-700 pt-5 pb-4">
@@ -507,7 +508,7 @@
                         </td>
                         <!-- Opciones -->
                         <td class="whitespace-nowrap px-6 py-4 text-right text-sm text-gray-500">
-                          <a href="">editar</a>
+                          <a href="{{ url_for('editar_gasto',id_usuario=usuario.id_usuario, id_gasto=gasto.id) }}">editar</a>
                         </td>
 
                         <!-- eliminar -->
