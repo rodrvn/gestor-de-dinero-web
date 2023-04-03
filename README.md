@@ -47,6 +47,6 @@ pip install -r requirements.txt
 python3 app.py
 ```
 
-## **Proyecto hecho con fines didacticos:**
+## **Proyecto hecho con fines didacticos**
 
-** Desarrollado por:**Rodrigo Vallejos
+**Desarrollado por Rodrigo Vallejos**
