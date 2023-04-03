@@ -63,10 +63,6 @@ def agregar_gastos(id_usuario):
     db.session.commit()
     return redirect(url_for('tracker', id_usuario=id_usuario))
 
-@app.route("/editar/<id_usuario>")
-def editar(id_usuario):
-    return 'editar'
-
 
 
 # Eliminar gasto
@@ -95,8 +91,9 @@ def eliminar_ingreso(id_usuario, id_ingreso):
 @app.route("/tracker/editar/<id_usuario>/<id_gasto>", methods=['GET', 'POST'])
 def editar_gasto(id_usuario, id_gasto):
 
-    gasto_editar = Gastos.query.filter_by(id_usuario=id_usuario, id=id_gasto).first()
     usuario = Usuario.query.get(id_usuario)
+
+    gasto_editar = Gastos.query.filter_by(id_usuario=id_usuario, id=id_gasto).first()
 
     #Si el metodo es Post actualiza
     if request.method == 'POST':
@@ -110,7 +107,23 @@ def editar_gasto(id_usuario, id_gasto):
     
     return render_template('edit.html', gasto_editar=gasto_editar, usuario=usuario)
 
+@app.route("/tracker/editar-ingreso/<id_usuario>/<id_ingreso>", methods=['GET', 'POST'])
+def editar_ingreso(id_usuario, id_ingreso):
+
+    usuario = Usuario.query.get(id_usuario)
+    ingreso_editar = Ingresos.query.filter_by(id_usuario=id_usuario, id=id_ingreso).first()
     
+    #Si el metodo es Post actualiza los datos
+    if request.method == 'POST':
+        ingreso_editar.razon_ingreso = request.form["razon_ingreso"]
+        ingreso_editar.ingreso_reciente = request.form["ingreso_reciente"]
+        ingreso_editar.fecha = request.form["fecha_ingreso"]
+
+        db.session.commit()
+        return redirect(url_for("tracker", id_usuario=id_usuario))
+    
+    return render_template('edit_ingresos.html', ingreso_editar=ingreso_editar, usuario=usuario)
+
 
     
 
