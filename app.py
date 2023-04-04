@@ -25,6 +25,11 @@ def tracker(id_usuario):
     gastos = Gastos.query.filter_by(id_usuario=id_usuario).all()
     ahorros = Ahorro.query.filter_by(id_usuario=id_usuario).all()
 
+    #Para traer solo los ultimos 5 gastos
+    ultimos_gastos = Gastos.query.filter_by(id_usuario=id_usuario).order_by(Gastos.fecha.desc()).limit(5).all()
+    #Para traer solo los ultimos 5 ingresos
+    ultimos_ingresos = Ingresos.query.filter_by(id_usuario=id_usuario).order_by(Ingresos.fecha.desc()).limit(5).all()
+
     #Trae los datos de la database sumados y filtrados por la id
   
     ingresos_totales = db.session.query(db.func.sum(Ingresos.ingreso_reciente)).filter(Ingresos.id_usuario==id_usuario).scalar()
@@ -38,7 +43,7 @@ def tracker(id_usuario):
     print(saldo_total)
     
 
-    return render_template('tracker.html', usuario=usuario, ingresos=ingresos, gastos=gastos, ahorros=ahorros, saldo_total=saldo_total, gastos_totales=gastos_totales)
+    return render_template('tracker.html', usuario=usuario, ingresos=ingresos, gastos=gastos, ultimos_gastos=ultimos_gastos, ahorros=ahorros, saldo_total=saldo_total, gastos_totales=gastos_totales, ultimos_ingresos=ultimos_ingresos)
 
 @app.route("/agregar_ingreso/<id_usuario>", methods=["POST"])
 def agregar_ingreso(id_usuario):
