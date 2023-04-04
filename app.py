@@ -39,11 +39,33 @@ def tracker(id_usuario):
     #Hace el calculo del saldo total
     
     saldo_total = ((ingresos_totales) - (gastos_totales))
-    
-    print(saldo_total)
+    #Para ver que recibe saldo total
+    #print(saldo_total)
     
 
     return render_template('tracker.html', usuario=usuario, ingresos=ingresos, gastos=gastos, ultimos_gastos=ultimos_gastos, ahorros=ahorros, saldo_total=saldo_total, gastos_totales=gastos_totales, ultimos_ingresos=ultimos_ingresos)
+
+
+# Ver total de gastos
+
+@app.route("/tracker/gastos/<id_usuario>", methods=['GET'])
+def ver_gastos(id_usuario):
+
+    # Trae los datos del usuario segun id
+    usuario = Usuario.query.get(id_usuario)
+    
+    #Trae los datos de gastos segun el id
+    gastos = Gastos.query.filter_by(id_usuario=id_usuario).all()
+
+    #Trae los datos de la database sumados y filtrados por la id
+    gastos_totales = db.session.query(db.func.sum(Gastos.gasto_reciente)).filter(Gastos.id_usuario==id_usuario).scalar()
+    
+    
+
+    return render_template('all_gastos.html', usuario=usuario, gastos=gastos,gastos_totales=gastos_totales)
+
+
+
 
 @app.route("/agregar_ingreso/<id_usuario>", methods=["POST"])
 def agregar_ingreso(id_usuario):
