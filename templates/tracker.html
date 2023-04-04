@@ -203,7 +203,7 @@
                       </tr>
                     </thead>
                     <!-- Datos de gastos -->
-                    {% for gasto in gastos %}
+                    {% for gasto in ultimos_gastos %}
                     <tbody class="divide-y divide-gray-200 bg-white">
                       <tr class="bg-white">
                         <td class="w-full max-w-0 whitespace-nowrap px-6 py-4 text-sm text-gray-900">
@@ -339,7 +339,7 @@
                         <th class="bg-gray-50 px-6 py-3 text-right text-sm font-semibold text-gray-900" scope="col">Fecha</th>
                       </tr>
                     </thead>
-                    {% for ingreso in ingresos%}
+                    {% for ingreso in ultimos_ingresos%}
                     <tbody class="divide-y divide-gray-200 bg-white">
                       <tr class="bg-white">
                         <td class="w-full max-w-0 whitespace-nowrap px-6 py-4 text-sm text-gray-900">
