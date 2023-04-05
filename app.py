@@ -38,7 +38,7 @@ def tracker(id_usuario):
 
     #Hace el calculo del saldo total
     
-    saldo_total = ((ingresos_totales) - (gastos_totales))
+    saldo_total = ((ingresos_totales) - (gastos_totales) - (ahorros))
     #Para ver que recibe saldo total
     #print(saldo_total)
     
@@ -82,6 +82,68 @@ def ver_ingresos(id_usuario):
 
     return render_template('all_ingresos.html', usuario=usuario, ingresos=ingresos,ingresos_totales=ingresos_totales)
 
+
+# Ver todos los ahorros
+
+@app.route("/tracker/ahorros/<id_usuario>", methods=['GET', 'POST'])
+def ver_ahorros(id_usuario):
+
+    # Trae los datos del usuario segun id
+    usuario = Usuario.query.get(id_usuario)
+    
+    #Trae los datos de gastos segun el id
+    ahorros = Ahorro.query.filter_by(id_usuario=id_usuario).all()
+
+    #Trae los datos de la database sumados y filtrados por la id
+    ahorros_totales = db.session.query(db.func.sum(Ahorro.monto_ahorro)).filter(Ahorro.id_usuario==id_usuario).scalar()
+    
+    
+
+    return render_template('all_ahorros.html', usuario=usuario, ahorros=ahorros, ahorros_totales=ahorros_totales)
+
+
+# Agregar ahorros
+@app.route("/agregar_ahorro/<id_usuario>", methods=["POST"])
+def agregar_ahorro(id_usuario):
+    monto_ahorro = request.form['monto_ahorro']
+    razon_ahorro = request.form['razon_ahorro']
+    # ingreso_gasto = request.form['fecha_ingreso']
+
+    ahorro = Ahorro(id_usuario=id_usuario, monto_ahorro=monto_ahorro, razon_ahorro=razon_ahorro)
+    db.session.add(ahorro)
+    db.session.commit()
+    return redirect(url_for('ver_ahorros', id_usuario=id_usuario))
+
+# Eliminar Ahorro
+@app.route("/eliminar_a/<id_usuario>/<id_ahorro>", methods=['GET','POST'])
+def eliminar_ahorro(id_usuario, id_ahorro):
+
+    ahorro_eliminar = Ahorro.query.filter_by(id_usuario=id_usuario, id=id_ahorro).first()
+
+    db.session.delete(ahorro_eliminar)
+    db.session.commit()
+
+    return redirect(url_for('ver_ahorros', id_usuario=id_usuario))
+
+# Editar ahorro
+@app.route("/tracker/editar-ahorro/<id_usuario>/<id_ahorro>", methods=['GET', 'POST'])
+def editar_ahorro(id_usuario, id_ahorro):
+
+    usuario = Usuario.query.get(id_usuario)
+
+    ahorro_editar = Ahorro.query.filter_by(id_usuario=id_usuario, id=id_ahorro).first()
+
+    #Si el metodo es Post actualiza
+    if request.method == 'POST':
+        ahorro_editar.razon_ahorro = request.form["razon_ahorro"]
+        ahorro_editar.monto_ahorro = request.form["monto_ahorro"]
+        ahorro_editar.fecha = request.form["fecha_ahorro"]
+
+        db.session.commit()
+        return redirect(url_for("ver_ahorros", id_usuario=id_usuario))
+    #Si es GET, nos da los datos que necesitamos
+    
+    return render_template('edit_ahorro.html', ahorro_editar=ahorro_editar, usuario=usuario)
 
 
 
