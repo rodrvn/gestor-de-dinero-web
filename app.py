@@ -43,10 +43,10 @@ def tracker(id_usuario):
     #print(saldo_total)
     
 
-    return render_template('tracker.html', usuario=usuario, ingresos=ingresos, gastos=gastos, ultimos_gastos=ultimos_gastos, ahorros=ahorros, saldo_total=saldo_total, gastos_totales=gastos_totales, ultimos_ingresos=ultimos_ingresos)
+    return render_template('tracker.html', usuario=usuario, ingresos=ingresos, gastos=gastos, ultimos_gastos=ultimos_gastos, ahorros=ahorros, saldo_total=saldo_total, gastos_totales=gastos_totales, ultimos_ingresos=ultimos_ingresos, ingresos_totales=ingresos_totales)
 
 
-# Ver total de gastos
+# Ver todos los gastos
 
 @app.route("/tracker/gastos/<id_usuario>", methods=['GET'])
 def ver_gastos(id_usuario):
@@ -63,6 +63,24 @@ def ver_gastos(id_usuario):
     
 
     return render_template('all_gastos.html', usuario=usuario, gastos=gastos,gastos_totales=gastos_totales)
+
+
+
+# Ver todos los ingresos
+
+@app.route("/tracker/ingresos/<id_usuario>", methods=['GET'])
+def ver_ingresos(id_usuario):
+
+    # Trae los datos del usuario segun id
+    usuario = Usuario.query.get(id_usuario)
+    
+    #Trae los datos de gastos segun el id
+    ingresos = Ingresos.query.filter_by(id_usuario=id_usuario).all()
+
+    #Trae los datos de la database sumados y filtrados por la id
+    ingresos_totales = db.session.query(db.func.sum(Ingresos.ingreso_reciente)).filter(Ingresos.id_usuario==id_usuario).scalar()
+
+    return render_template('all_ingresos.html', usuario=usuario, ingresos=ingresos,ingresos_totales=ingresos_totales)
 
 
 
