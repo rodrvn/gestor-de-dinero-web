@@ -89,15 +89,15 @@
     <div class="inset-x-0 bottom-0 mx-auto max-w-7xl overflow-hidden py-20 px-6 sm:py-24 lg:px-8">
       <nav class="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12" aria-label="Footer">
         <div class="pb-6">
-          <a href="/transaccion/nueva" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Agregar transaccion</a>
+          <a href="{{ url_for('ver_ingresos',id_usuario=usuario.id_usuario) }}" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Ver todos los ingresos</a>
         </div>
   
         <div class="pb-6">
-          <a href="/cerrar" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Cerrar bloque</a>
+          <a href="{{ url_for('tracker',id_usuario=usuario.id_usuario) }}" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Pagina de inicio</a>
         </div>
   
         <div class="pb-6">
-          <a href="/cadena" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Mirar todos los bloques</a>
+          <a href="{{ url_for('ver_gastos',id_usuario=usuario.id_usuario) }}" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Ver todos los gastos</a>
         </div>
       </nav>
 
