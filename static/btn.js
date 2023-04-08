@@ -38,3 +38,18 @@ function add_ingreso(){
     }
     
 }
+
+// para el boton de agregar nuevo ahorro
+function add_ahorro(){
+    var addAhorro = document.getElementById("addAhorro");
+    var closeAhorro = document.getElementById("closeAhorro");
+
+    if(addAhorro.classList.contains("hidden")){
+        addAhorro.classList.remove("hidden")
+        closeAhorro.classList.add("hidden")
+    } else {
+        addAhorro.classList.add("hidden")
+        closeAhorro.classList.remove("hidden")
+    }
+    
+}
