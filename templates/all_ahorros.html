@@ -103,7 +103,7 @@
             <form action="{{ url_for('agregar_ahorro', id_usuario=usuario.id_usuario) }}", method="POST">
               
               <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-                <div class="mt-2 flex flex-col">
+                <div id="addAhorro" class="hidden mt-2 flex flex-col">
                   <div class="min-w-full overflow-hidden overflow-x-auto align-middle shadow sm:rounded-lg">
                     
                     <table class="min-w-full divide-y divide-gray-200">
@@ -142,16 +142,20 @@
 
                     </table>
                   </div>
+                  <!-- Botones -->
+
+                  <div class="flex justify-end mt-6 flex space-x-3 md:mt-0 md:ml-4">
+                    <button type="submit" class="inline-flex items-center rounded-md bg-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600">Agregar Ahorro</button>
+                    <button type="button" onclick="add_ahorro()" class="inline-flex items-center rounded-md bg-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600">Cancelar</button>
+
+                  </div>
                 </div>
 
-                <!-- Botones -->
                 <div class="flex justify-end mt-6 flex space-x-3 md:mt-0 md:ml-4">
-                  <button type="#" class="inline-flex items-center rounded-md bg-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600">Nuevo Ahorro</button>
+                  <button  type="button" id="closeAhorro" onclick="add_ahorro()" class="inline-flex items-center rounded-md bg-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600">Nuevo Ahorro</button>
                 </div>
 
-                <div class="flex justify-end mt-6 flex space-x-3 md:mt-0 md:ml-4">
-                  <button type="buttom" class="inline-flex items-center rounded-md bg-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600">Agregar Ahorro</button>
-                </div>
+                
 
               </div>
             </form>
