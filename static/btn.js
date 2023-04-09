@@ -9,6 +9,15 @@ function slide(){
     }
 }
 
+function menuUser(){
+    var menuUser = document.getElementById("menuUser");
+    if(menuUser.classList.contains("hidden")){
+        menuUser.classList.remove("hidden")
+    } else {
+        menuUser.classList.add("hidden")
+    }
+}
+
 // para el boton de agregar nuevo gasto
 function add_gasto(){
     var addGasto = document.getElementById("addGasto");
