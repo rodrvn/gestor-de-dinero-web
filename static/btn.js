@@ -1,3 +1,10 @@
+// Opcion de confirmacion
+function check(){
+    var opcion = confirm('Estas seguro que queres eliminar');
+    if (opcion == false) {
+        event.preventDefault();
+    }
+}
 
 // Para ver el slidebar
 function slide(){

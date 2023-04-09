@@ -82,7 +82,7 @@
                 <!-- eliminar -->
                 
                 <td class="whitespace-nowrap px-6 py-4 text-right text-sm text-gray-500">
-                  <a href="{{ url_for('eliminar_ahorro',id_usuario=usuario.id_usuario, id_ahorro=ahorro.id) }}">eliminar</a>
+                  <a onclick="check()" href="{{ url_for('eliminar_ahorro',id_usuario=usuario.id_usuario, id_ahorro=ahorro.id) }}">eliminar</a>
                 </td>
                 
                 <!-- Termina Opciones -->
