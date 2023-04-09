@@ -10,10 +10,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # conecta la base de datos y conecta la app
 db.init_app(app)
 
+# Homepage
 @app.route("/")
 def index():
     return 'poner /tracker/"id_del_usuario" :)'
 
+
+# Pagina inicial del tracker
 @app.route("/tracker/<id_usuario>", methods=['GET'])
 def tracker(id_usuario):
 
@@ -46,7 +49,9 @@ def tracker(id_usuario):
     return render_template('tracker.html', usuario=usuario, ingresos=ingresos, gastos=gastos, ultimos_gastos=ultimos_gastos, ahorros=ahorros, saldo_total=saldo_total, gastos_totales=gastos_totales, ultimos_ingresos=ultimos_ingresos, ingresos_totales=ingresos_totales)
 
 
-# Ver todos los gastos
+
+
+#### Pagina Gastos ####
 
 @app.route("/tracker/gastos/<id_usuario>", methods=['GET'])
 def ver_gastos(id_usuario):
@@ -64,9 +69,58 @@ def ver_gastos(id_usuario):
 
     return render_template('all_gastos.html', usuario=usuario, gastos=gastos,gastos_totales=gastos_totales)
 
+# Agregar gastos
+@app.route("/agregar_gasto/<id_usuario>", methods=["POST"])
+def agregar_gastos(id_usuario):
+    gasto_reciente = request.form['gasto_reciente']
+    razon_gasto = request.form['razon_gasto']
+    # fecha_gasto = request.form['fecha_gasto']
+
+    gasto = Gastos(id_usuario=id_usuario, gasto_reciente=gasto_reciente, razon_gasto=razon_gasto)
+    db.session.add(gasto)
+    db.session.commit()
+    return redirect(url_for('tracker', id_usuario=id_usuario))
 
 
-# Ver todos los ingresos
+# Editar gastos
+@app.route("/tracker/editar-gasto/<id_usuario>/<id_gasto>", methods=['GET', 'POST'])
+def editar_gasto(id_usuario, id_gasto):
+
+    usuario = Usuario.query.get(id_usuario)
+
+    gasto_editar = Gastos.query.filter_by(id_usuario=id_usuario, id=id_gasto).first()
+
+    #Si el metodo es Post actualiza
+    if request.method == 'POST':
+        gasto_editar.razon_gasto = request.form["razon_gasto"]
+        gasto_editar.gasto_reciente = request.form["gasto_reciente"]
+        gasto_editar.fecha = request.form["fecha_gasto"]
+
+        db.session.commit()
+        return redirect(url_for("tracker", id_usuario=id_usuario))
+    #Si es GET, nos da los datos que necesitamos
+    
+    return render_template('edit_gastos.html', gasto_editar=gasto_editar, usuario=usuario)
+
+
+# Eliminar gasto
+@app.route("/eliminar_g/<id_usuario>/<id_gasto>", methods=['POST','GET'])
+def eliminar_gasto(id_usuario, id_gasto):
+
+    gasto_eliminar = Gastos.query.filter_by(id_usuario=id_usuario, id=id_gasto).first()
+
+    db.session.delete(gasto_eliminar)
+    db.session.commit()
+
+    return redirect(url_for('tracker', id_usuario=id_usuario))
+
+
+#### Termina Pagina Gastos ####
+
+
+
+
+#### Pagina Ingresos ####
 
 @app.route("/tracker/ingresos/<id_usuario>", methods=['GET'])
 def ver_ingresos(id_usuario):
@@ -82,8 +136,56 @@ def ver_ingresos(id_usuario):
 
     return render_template('all_ingresos.html', usuario=usuario, ingresos=ingresos,ingresos_totales=ingresos_totales)
 
+# Agregar ingresos
+@app.route("/agregar_ingreso/<id_usuario>", methods=["POST"])
+def agregar_ingreso(id_usuario):
+    ingreso_reciente = request.form['ingreso_reciente']
+    razon_ingreso = request.form['razon_ingreso']
+    # ingreso_gasto = request.form['fecha_ingreso']
 
-# Ver todos los ahorros
+    ingreso = Ingresos(id_usuario=id_usuario, ingreso_reciente=ingreso_reciente, razon_ingreso=razon_ingreso)
+    db.session.add(ingreso)
+    db.session.commit()
+    return redirect(url_for('tracker', id_usuario=id_usuario))
+
+
+# Editar ingresos
+@app.route("/tracker/editar-ingreso/<id_usuario>/<id_ingreso>", methods=['GET', 'POST'])
+def editar_ingreso(id_usuario, id_ingreso):
+
+    usuario = Usuario.query.get(id_usuario)
+    ingreso_editar = Ingresos.query.filter_by(id_usuario=id_usuario, id=id_ingreso).first()
+    
+    #Si el metodo es Post actualiza los datos
+    if request.method == 'POST':
+        ingreso_editar.razon_ingreso = request.form["razon_ingreso"]
+        ingreso_editar.ingreso_reciente = request.form["ingreso_reciente"]
+        ingreso_editar.fecha = request.form["fecha_ingreso"]
+
+        db.session.commit()
+        return redirect(url_for("tracker", id_usuario=id_usuario))
+    
+    return render_template('edit_ingresos.html', ingreso_editar=ingreso_editar, usuario=usuario)
+
+
+# Eliminar ingreso
+@app.route("/eliminar_i/<id_usuario>/<id_ingreso>", methods=['GET','POST'])
+def eliminar_ingreso(id_usuario, id_ingreso):
+
+    ingreso_eliminar = Ingresos.query.filter_by(id_usuario=id_usuario, id=id_ingreso).first()
+
+    db.session.delete(ingreso_eliminar)
+    db.session.commit()
+
+    return redirect(url_for('tracker', id_usuario=id_usuario))
+
+#### Termina Pagina Ingresos ####
+
+
+
+
+
+#### Pagina Ahorros ####
 
 @app.route("/tracker/ahorros/<id_usuario>", methods=['GET', 'POST'])
 def ver_ahorros(id_usuario):
@@ -145,96 +247,7 @@ def editar_ahorro(id_usuario, id_ahorro):
     
     return render_template('edit_ahorro.html', ahorro_editar=ahorro_editar, usuario=usuario)
 
-
-
-@app.route("/agregar_ingreso/<id_usuario>", methods=["POST"])
-def agregar_ingreso(id_usuario):
-    ingreso_reciente = request.form['ingreso_reciente']
-    razon_ingreso = request.form['razon_ingreso']
-    # ingreso_gasto = request.form['fecha_ingreso']
-
-    ingreso = Ingresos(id_usuario=id_usuario, ingreso_reciente=ingreso_reciente, razon_ingreso=razon_ingreso)
-    db.session.add(ingreso)
-    db.session.commit()
-    return redirect(url_for('tracker', id_usuario=id_usuario))
-
-
-@app.route("/agregar_gasto/<id_usuario>", methods=["POST"])
-def agregar_gastos(id_usuario):
-    gasto_reciente = request.form['gasto_reciente']
-    razon_gasto = request.form['razon_gasto']
-    # fecha_gasto = request.form['fecha_gasto']
-
-    gasto = Gastos(id_usuario=id_usuario, gasto_reciente=gasto_reciente, razon_gasto=razon_gasto)
-    db.session.add(gasto)
-    db.session.commit()
-    return redirect(url_for('tracker', id_usuario=id_usuario))
-
-
-
-# Eliminar gasto
-@app.route("/eliminar_g/<id_usuario>/<id_gasto>", methods=['POST','GET'])
-def eliminar_gasto(id_usuario, id_gasto):
-
-    gasto_eliminar = Gastos.query.filter_by(id_usuario=id_usuario, id=id_gasto).first()
-
-    db.session.delete(gasto_eliminar)
-    db.session.commit()
-
-    return redirect(url_for('tracker', id_usuario=id_usuario))
-
-# Eliminar ingreso
-@app.route("/eliminar_i/<id_usuario>/<id_ingreso>", methods=['GET','POST'])
-def eliminar_ingreso(id_usuario, id_ingreso):
-
-    ingreso_eliminar = Ingresos.query.filter_by(id_usuario=id_usuario, id=id_ingreso).first()
-
-    db.session.delete(ingreso_eliminar)
-    db.session.commit()
-
-    return redirect(url_for('tracker', id_usuario=id_usuario))
-
-
-@app.route("/tracker/editar-gasto/<id_usuario>/<id_gasto>", methods=['GET', 'POST'])
-def editar_gasto(id_usuario, id_gasto):
-
-    usuario = Usuario.query.get(id_usuario)
-
-    gasto_editar = Gastos.query.filter_by(id_usuario=id_usuario, id=id_gasto).first()
-
-    #Si el metodo es Post actualiza
-    if request.method == 'POST':
-        gasto_editar.razon_gasto = request.form["razon_gasto"]
-        gasto_editar.gasto_reciente = request.form["gasto_reciente"]
-        gasto_editar.fecha = request.form["fecha_gasto"]
-
-        db.session.commit()
-        return redirect(url_for("tracker", id_usuario=id_usuario))
-    #Si es GET, nos da los datos que necesitamos
-    
-    return render_template('edit_gastos.html', gasto_editar=gasto_editar, usuario=usuario)
-
-@app.route("/tracker/editar-ingreso/<id_usuario>/<id_ingreso>", methods=['GET', 'POST'])
-def editar_ingreso(id_usuario, id_ingreso):
-
-    usuario = Usuario.query.get(id_usuario)
-    ingreso_editar = Ingresos.query.filter_by(id_usuario=id_usuario, id=id_ingreso).first()
-    
-    #Si el metodo es Post actualiza los datos
-    if request.method == 'POST':
-        ingreso_editar.razon_ingreso = request.form["razon_ingreso"]
-        ingreso_editar.ingreso_reciente = request.form["ingreso_reciente"]
-        ingreso_editar.fecha = request.form["fecha_ingreso"]
-
-        db.session.commit()
-        return redirect(url_for("tracker", id_usuario=id_usuario))
-    
-    return render_template('edit_ingresos.html', ingreso_editar=ingreso_editar, usuario=usuario)
-
-
-    
-
-    
+#### Termina Pagina Ahorros ####
 
 
 
