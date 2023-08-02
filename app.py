@@ -26,7 +26,7 @@ def load_user(id):
 # Homepage
 @app.route("/")
 def home():
-    return 'poner /tracker/"id_del_usuario" :)'
+    return redirect(url_for('tracker'))
 
 # Register
 @app.route("/registro", methods=['POST', 'GET'])
@@ -97,6 +97,11 @@ def login():
             flash('Correo o contraseña incorrecta', category='error')
     return render_template('login.html')
 
+#Ruta recuperar contraseña
+@app.route('/recuperar_contraseña', methods=['GET','POST'])
+def recuperar():
+    return render_template('recuperar.html')
+
 # Desconectar sesion
 @app.route('/logout', methods = ['GET', 'POST'])
 @login_required
@@ -107,6 +112,7 @@ def logout():
 
 # Pagina inicial del tracker
 @app.route("/tracker", methods=['GET'])
+@login_required
 def tracker():
 
     # Trae los datos del usuario segun id
@@ -146,6 +152,7 @@ def tracker():
 #### Pagina Gastos ####
 
 @app.route("/tracker/gastos/", methods=['GET'])
+@login_required
 def ver_gastos():
 
     # Trae los datos del usuario segun id
@@ -165,6 +172,7 @@ def ver_gastos():
 
 # Agregar gastos
 @app.route("/agregar_gasto/", methods=["POST"])
+@login_required
 def agregar_gastos():
     gasto_reciente = request.form['gasto_reciente']
     razon_gasto = request.form['razon_gasto']
@@ -178,6 +186,7 @@ def agregar_gastos():
 
 # Editar gastos
 @app.route("/tracker/editar-gasto/<id_gasto>", methods=['GET', 'POST'])
+@login_required
 def editar_gasto(id_gasto):
 
     usuario = Usuario.query.get(current_user.id)
@@ -199,6 +208,7 @@ def editar_gasto(id_gasto):
 
 # Eliminar gasto
 @app.route("/eliminar_g/<id_gasto>", methods=['POST','GET'])
+@login_required
 def eliminar_gasto(id_gasto):
 
     gasto_eliminar = Gastos.query.filter_by(id_usuario=current_user.id, id=id_gasto).first()
@@ -217,6 +227,7 @@ def eliminar_gasto(id_gasto):
 #### Pagina Ingresos ####
 
 @app.route("/tracker/ingresos/", methods=['GET'])
+@login_required
 def ver_ingresos():
 
     # Trae los datos del usuario segun id
@@ -233,6 +244,7 @@ def ver_ingresos():
 
 # Agregar ingresos
 @app.route("/agregar_ingreso/", methods=["POST"])
+@login_required
 def agregar_ingreso():
     ingreso_reciente = request.form['ingreso_reciente']
     razon_ingreso = request.form['razon_ingreso']
@@ -246,6 +258,7 @@ def agregar_ingreso():
 
 # Editar ingresos
 @app.route("/tracker/editar-ingreso/<id_ingreso>", methods=['GET', 'POST'])
+@login_required
 def editar_ingreso(id_ingreso):
 
     usuario = Usuario.query.get(current_user.id)
@@ -265,6 +278,7 @@ def editar_ingreso(id_ingreso):
 
 # Eliminar ingreso
 @app.route("/eliminar_i/<id_ingreso>", methods=['GET','POST'])
+@login_required
 def eliminar_ingreso(id_ingreso):
 
     ingreso_eliminar = Ingresos.query.filter_by(id_usuario=current_user.id, id=id_ingreso).first()
@@ -283,6 +297,7 @@ def eliminar_ingreso(id_ingreso):
 #### Pagina Ahorros ####
 
 @app.route("/tracker/ahorros/", methods=['GET', 'POST'])
+@login_required
 def ver_ahorros():
 
     # Trae los datos del usuario segun id
@@ -302,6 +317,7 @@ def ver_ahorros():
 
 # Agregar ahorros
 @app.route("/agregar_ahorro/", methods=["POST"])
+@login_required
 def agregar_ahorro():
     monto_ahorro = request.form['monto_ahorro']
     razon_ahorro = request.form['razon_ahorro']
@@ -314,6 +330,7 @@ def agregar_ahorro():
 
 # Eliminar Ahorro
 @app.route("/eliminar_a/<id_ahorro>", methods=['GET','POST'])
+@login_required
 def eliminar_ahorro(id_ahorro):
 
     ahorro_eliminar = Ahorro.query.filter_by(id_usuario=current_user.id, id=id_ahorro).first()
@@ -325,6 +342,7 @@ def eliminar_ahorro(id_ahorro):
 
 # Editar ahorro
 @app.route("/tracker/editar-ahorro/<id_ahorro>", methods=['GET', 'POST'])
+@login_required
 def editar_ahorro(id_ahorro):
 
     usuario = Usuario.query.get(current_user.id)
