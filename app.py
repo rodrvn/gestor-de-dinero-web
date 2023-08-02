@@ -1,19 +1,81 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 from models import db, Usuario, Ingresos, Gastos, Ahorro
+from flask_login import LoginManager, login_user, current_user, logout_user, login_required
+from werkzeug.security import generate_password_hash
+
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'super_123123sdg_SDgsdg-'
 
 # conecta la base de datos y conecta la app
 db.init_app(app)
+
+# Instanciamos LoginManager para conectar con la app
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+
+# Creamos una funcion para manejar los usuarios logeados
+@login_manager.user_loader
+def load_user(id):
+    return Usuario.query.get(int(id))
+
 
 # Homepage
 @app.route("/")
 def index():
     return 'poner /tracker/"id_del_usuario" :)'
+
+# Register
+@app.route("/registro", methods=['POST', 'GET'])
+def registro():
+    # if current_user.is_authenticated:
+    #     flash(f'Ya estas logeado {current_user.nombre}! :)')
+    #     return redirect(url_for('tracker'))
+    if request.method == 'POST':
+        nombre = request.form.get("nombre")
+        apellido = request.form.get("apellido")
+        email = request.form.get("email")
+        password1 = request.form.get("password1")
+        password2 = request.form.get("password2")
+        # Hacemos la confirmación de creación de usuario
+        if Usuario.query.filter_by(correo=email).first():
+            flash('Este correo ya existe uwu', category='error')
+        elif len(email) < 4:
+            flash('Tu correo debe ser mayor a 4 caracteres', category='error')
+        elif len(nombre) < 4:
+            flash('Tu nombre debe ser mayor a 4 caracteres', category='error')
+        elif len(apellido) < 4:
+            flash('Tu apellido debe ser mayor a 4 caracteres', category='error')
+        elif len(password1) < 3:
+            flash('Tu contraseña debe ser mayor a 3 caracteres', category='error')
+        elif password1 != password2:
+            flash('Las contraseñas no coinciden', category='error')
+        else:
+            # Hasheamos la contraseña para mayor seguridad
+            password = generate_password_hash(password1, method='sha256')
+            user = Usuario(nombre=nombre, apellido=apellido, correo=email, password=password)
+            # Agregamos a la db
+            db.session.add(user)
+            # Y confirmamos
+            db.session.commit()
+            # Recuerda que el usuario esta logeado
+            login_user(user, remember=True)
+            flash('Usuario creado!', category='success')
+            return redirect(url_for("tracker"))
+    return render_template("registro.html")
+
+# Desconectar sesion
+@app.route('/logout', methods = ['GET', 'POST'])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+# Login
 
 
 # Pagina inicial del tracker
@@ -254,4 +316,4 @@ def editar_ahorro(id_usuario, id_ahorro):
 
 # BREAKPOINT #
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port='9000')
