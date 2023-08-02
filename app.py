@@ -1,5 +1,4 @@
 from flask import Flask, render_template, url_for, request, redirect, flash
-from flask_sqlalchemy import SQLAlchemy
 from models import db, Usuario, Ingresos, Gastos, Ahorro
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 from werkzeug.security import generate_password_hash
@@ -26,7 +25,7 @@ def load_user(id):
 
 # Homepage
 @app.route("/")
-def index():
+def home():
     return 'poner /tracker/"id_del_usuario" :)'
 
 # Register
@@ -68,14 +67,32 @@ def registro():
             return redirect(url_for("tracker"))
     return render_template("registro.html")
 
+#Ruta para logearte
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        flash(f'Ya estas logeado {current_user.nombre}! :)')
+        return redirect(url_for('home'))
+    if request.method == 'POST':
+        correo = request.form.get("correo_user")
+        password = request.form.get("password")
+        user = Usuario.query.filter_by(correo=correo).first()
+        if user and user.confirmar_contraseña(password):
+            flash(f'Bienvenidx de vuelta {user.nombre} :)', category='succes')
+            # Recuerda que el usuario esta logeado
+            login_user(user, remember=True)
+            print(current_user)
+            return redirect(url_for('home'))  
+        else:
+            flash('Correo o contraseña incorrecta', category='error')
+    return render_template('login.html')
+
 # Desconectar sesion
 @app.route('/logout', methods = ['GET', 'POST'])
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
-
-# Login
 
 
 # Pagina inicial del tracker
