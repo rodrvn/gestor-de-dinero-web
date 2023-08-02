@@ -76,13 +76,13 @@
                 </td>
                 <!-- Opciones -->
                 <td class="whitespace-nowrap px-6 py-4 text-right text-sm text-gray-500">
-                  <a href="{{ url_for('editar_ahorro',id_usuario=usuario.id_usuario, id_ahorro=ahorro.id) }}">editar</a>
+                  <a href="{{ url_for('editar_ahorro',id_usuario=current_user.id, id_ahorro=ahorro.id) }}">editar</a>
                 </td>
 
                 <!-- eliminar -->
                 
                 <td class="whitespace-nowrap px-6 py-4 text-right text-sm text-gray-500">
-                  <a onclick="check()" href="{{ url_for('eliminar_ahorro',id_usuario=usuario.id_usuario, id_ahorro=ahorro.id) }}">eliminar</a>
+                  <a onclick="check()" href="{{ url_for('eliminar_ahorro',id_usuario=current_user.id, id_ahorro=ahorro.id) }}">eliminar</a>
                 </td>
                 
                 <!-- Termina Opciones -->
@@ -100,7 +100,7 @@
 
           <div class="hidden sm:block">
           
-            <form action="{{ url_for('agregar_ahorro', id_usuario=usuario.id_usuario) }}", method="POST">
+            <form action="{{ url_for('agregar_ahorro') }}", method="POST">
               
               <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
                 <div id="addAhorro" class="hidden mt-2 flex flex-col">
