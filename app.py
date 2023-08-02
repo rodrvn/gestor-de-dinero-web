@@ -97,6 +97,11 @@ def login():
             flash('Correo o contraseña incorrecta', category='error')
     return render_template('login.html')
 
+#Ruta recuperar contraseña
+@app.route('/recuperar_contraseña', methods=['GET','POST'])
+def recuperar():
+    return render_template('recuperar.html')
+
 # Desconectar sesion
 @app.route('/logout', methods = ['GET', 'POST'])
 @login_required
