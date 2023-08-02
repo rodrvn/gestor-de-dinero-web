@@ -33,7 +33,7 @@ class Usuario(db.Model, UserMixin):
 class Ingresos(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False) # Creador de la receta
-    ingreso_reciente = db.Column(db.Integer)
+    ingreso_reciente = db.Column(db.Integer, default=0)
     razon_ingreso = db.Column(db.String(50))
     fecha = db.Column(db.String, default=fecha_string)
 
@@ -43,7 +43,7 @@ class Ingresos(db.Model):
 class Gastos(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False) # Creador de la receta
-    gasto_reciente = db.Column(db.Integer)
+    gasto_reciente = db.Column(db.Integer, default=0)
     razon_gasto = db.Column(db.String(50))
     fecha = db.Column(db.String, default=fecha_string)
 
@@ -52,6 +52,6 @@ class Gastos(db.Model):
 class Ahorro(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False) # Creador de la receta
-    monto_ahorro = db.Column(db.Integer)
+    monto_ahorro = db.Column(db.Integer, default=0)
     razon_ahorro = db.Column(db.String(50))
     fecha = db.Column(db.String, default=fecha_string)
