@@ -135,7 +135,7 @@ def tracker():
         gastos_totales = 0
     if ahorros == None:
         ahorros = 0
-    saldo_total = ((ingresos_totales) - (gastos_totales) - (ahorros))
+    saldo_total = ((ingresos_totales) - (gastos_totales))
     
 
     return render_template('tracker.html', usuario=usuario, ingresos=ingresos, gastos=gastos, ultimos_gastos=ultimos_gastos, ahorros=ahorros, saldo_total=saldo_total, gastos_totales=gastos_totales, ultimos_ingresos=ultimos_ingresos, ingresos_totales=ingresos_totales)
