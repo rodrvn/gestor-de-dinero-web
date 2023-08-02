@@ -63,6 +63,16 @@ def registro():
             db.session.commit()
             # Recuerda que el usuario esta logeado
             login_user(user, remember=True)
+            if user.is_authenticated:
+                ingresos = Ingresos(id_usuario=current_user.id, razon_ingreso='Nombre del ingreso')
+                gastos = Gastos(id_usuario=current_user.id, razon_gasto='Nombre del gasto')
+                ahorros = Ahorro(id_usuario=current_user.id, razon_ahorro='Nombre del ahorro')
+                db.session.add(ingresos)
+                db.session.add(gastos)
+                db.session.add(ahorros)
+                db.session.commit()
+
+
             flash('Usuario creado!', category='success')
             return redirect(url_for("tracker"))
     return render_template("registro.html")
@@ -82,7 +92,7 @@ def login():
             # Recuerda que el usuario esta logeado
             login_user(user, remember=True)
             print(current_user)
-            return redirect(url_for('home'))  
+            return redirect(url_for('tracker'))  
         else:
             flash('Correo o contraseña incorrecta', category='error')
     return render_template('login.html')
@@ -96,27 +106,27 @@ def logout():
 
 
 # Pagina inicial del tracker
-@app.route("/tracker/<id_usuario>", methods=['GET'])
-def tracker(id_usuario):
+@app.route("/tracker", methods=['GET'])
+def tracker():
 
     # Trae los datos del usuario segun id
-    usuario = Usuario.query.get(id_usuario)
+    usuario = Usuario.query.get(current_user.id)
     
     #Trae los datos segun el id
-    ingresos = Ingresos.query.filter_by(id_usuario=id_usuario).all()
-    gastos = Gastos.query.filter_by(id_usuario=id_usuario).all()
-    ahorros = Ahorro.query.filter_by(id_usuario=id_usuario).all()
+    ingresos = Ingresos.query.filter_by(id_usuario=current_user.id).all()
+    gastos = Gastos.query.filter_by(id_usuario=current_user.id).all()
+    ahorros = Ahorro.query.filter_by(id_usuario=current_user.id).all()
 
     #Para traer solo los ultimos 5 gastos
-    ultimos_gastos = Gastos.query.filter_by(id_usuario=id_usuario).order_by(Gastos.fecha.desc()).limit(5).all()
+    ultimos_gastos = Gastos.query.filter_by(id_usuario=current_user.id).order_by(Gastos.fecha.desc()).limit(5).all()
     #Para traer solo los ultimos 5 ingresos
-    ultimos_ingresos = Ingresos.query.filter_by(id_usuario=id_usuario).order_by(Ingresos.fecha.desc()).limit(5).all()
+    ultimos_ingresos = Ingresos.query.filter_by(id_usuario=current_user.id).order_by(Ingresos.fecha.desc()).limit(5).all()
 
     #Trae los datos de la database sumados y filtrados por la id
   
-    ingresos_totales = db.session.query(db.func.sum(Ingresos.ingreso_reciente)).filter(Ingresos.id_usuario==id_usuario).scalar()
-    gastos_totales = db.session.query(db.func.sum(Gastos.gasto_reciente)).filter(Gastos.id_usuario==id_usuario).scalar()
-    ahorros = db.session.query(db.func.sum(Ahorro.monto_ahorro)).filter(Ahorro.id_usuario==id_usuario).scalar()
+    ingresos_totales = db.session.query(db.func.sum(Ingresos.ingreso_reciente)).filter(Ingresos.id_usuario==current_user.id).scalar()
+    gastos_totales = db.session.query(db.func.sum(Gastos.gasto_reciente)).filter(Gastos.id_usuario==current_user.id).scalar()
+    ahorros = db.session.query(db.func.sum(Ahorro.monto_ahorro)).filter(Ahorro.id_usuario==current_user.id).scalar()
 
     #Hace el calculo del saldo total
     
