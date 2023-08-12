@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block tittle %} Edita tu perfil {% endblock %}
+
+
+
+{% block bodycontent %}
+
+<div class="flex align-center justify-end">
+
+    <div class="">
+        <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
+            <div>
+                <h2 class="text-base font-semibold leading-7 ">Informacion personal</h2>
+                <p class="mt-1 text-sm leading-6 text-gray-400">Use a permanent address where you can receive mail.</p>
+            </div>
+
+            <form action="{{ url_for('perfil') }}" method="post" class="md:col-span-2">
+                <input type="hidden" name="accion" value="cambiar_perfil">
+                
+                <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
+                    <div class="col-span-full flex items-center gap-x-8">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="h-24 w-24 flex-none rounded-lg bg-gray-800 object-cover">
+                        <div>
+                            <button type="button" class="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400">Cambiar foto</button>
+                            <p class="mt-2 text-xs leading-5 text-gray-400">JPG or PNG. 1MB max.</p>
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-3">
+                        <label for="nombre" class="block text-sm font-medium leading-6">Nombre</label>
+                        <div class="mt-2">
+                            <input type="text" name="nombre" id="nombre" value="{{ usuario.nombre }}" class="block w-full rounded-md border-0  py-1.5  shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-3">
+                        <label for="last-name" class="block text-sm font-medium leading-6">Apellido</label>
+                        <div class="mt-2">
+                            <input type="text" name="apellido" id="apellido" value="{{ usuario.apellido }}" class="block w-full rounded-md border-0 bg-grey/5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                    </div>
+
+                    <div class="col-span-full">
+                        <label for="email" class="block text-sm font-medium leading-6 ">Correo electronico</label>
+                        <div class="mt-2">
+                            <input id="email" name="email" type="email" value="{{ usuario.correo }}" class="block w-full rounded-md border-0 text-gray-900 bg-white/5 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="mt-8 flex">
+                    <button type="submit" class="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Guardar</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
+            <div>
+                <h2 class="text-base font-semibold leading-7">Cambiar contraseña</h2>
+                <p class="mt-1 text-sm leading-6 text-gray-400">Cambia la contraseña asociada a tu cuenta.</p>
+            </div>
+
+            <form action="{{ url_for('perfil') }}" method="post" class="md:col-span-2">
+                <input type="hidden" name="accion" value="cambiar_contraseña">
+                <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
+                    <div class="col-span-full">
+                        <label for="contraseña-actual" class="block text-sm font-medium leading-6">Contraseña actual</label>
+                        <div class="mt-2">
+                            <input autocomplete="off" id="current_password" name="current_password" type="password" class="block w-full rounded-md border-0 bg-white/5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                    </div>
+
+                    <div class="col-span-full">
+                        <label for="nueva-contraseña" autocomplete="off" class="block text-sm font-medium leading-6">Nueva contraseña</label>
+                        <div class="mt-2">
+                            <input id="new_password" autocomplete="off" name="new_password" type="password" class="block w-full rounded-md border-0 bg-white/5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                    </div>
+
+                    <div class="col-span-full">
+                        <label for="confirmar-contraseña" class="block text-sm font-medium leading-6">Confirmar contraseña nueva</label>
+                        <div class="mt-2">
+                            <input id="new_password_c" autocomplete="off" name="new_password_c" type="password" class="block w-full rounded-md border-0 bg-white/5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex">
+                    <button type="submit" class="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Guardar</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
+            <div>
+                <h2 class="text-base font-semibold leading-7">Borrar cuenta</h2>
+                <p class="mt-1 text-sm leading-6 text-gray-400">¿Ya no necesitas nuestro servicio? Pueden borrar tu cuenta aqui. Esta accion no es reversible y toda tu informacion y datos seran borrador permanentemente.</p>
+            </div>
+
+            <form action="{{ url_for('borrar_cuenta') }}" method="post" class="flex items-start md:col-span-2">
+                <button type="submit" class="rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-400">Si, borrar mi cuenta.</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+    
+{% endblock %}

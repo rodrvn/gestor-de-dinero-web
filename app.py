@@ -102,6 +102,55 @@ def login():
 def recuperar():
     return render_template('recuperar.html')
 
+# Ruta para borrar cuenta
+@app.route('/borrar_cuenta', methods=['GET','POST'])
+def borrar_cuenta():
+    return redirect(url_for('registro'))
+
+#Ruta perfil
+@app.route('/perfil', methods=['GET','POST'])
+def perfil():
+    usuario = Usuario.query.get(current_user.id)
+    if request.method == 'POST':
+        # Obtén el valor del campo oculto 'accion'
+        accion = request.form.get('accion')
+
+        if accion == 'cambiar_perfil':
+            # Aquí manejas la acción de cambiar nombre
+            usuario.nombre = request.form.get('nombre')
+            usuario.apellido = request.form.get('apellido')
+            usuario.correo = request.form.get('email')
+            # Realiza las operaciones necesarias para cambiar la foto de usuario
+
+            db.session.commit()
+
+        elif accion == 'cambiar_contraseña':
+            # Recibimos la contraseña actual
+            contraseña_actual = request.form['current_password']
+
+            # Recibimos la nueva contraseñá
+            nueva_contraseña1 = request.form['new_password']
+            nueva_contraseña2 = request.form['new_password_c']
+            print(contraseña_actual, nueva_contraseña1, nueva_contraseña2)
+            # Confirmamos que sea la contraseña
+            if usuario.confirmar_contraseña(contraseña_actual):
+                
+                if len(nueva_contraseña1) < 3:
+                    flash('Tu contraseña nueva debe ser mayor a 3 caracteres', category='error')
+                elif nueva_contraseña1 != nueva_contraseña2:
+                    flash('Las contraseñas no coinciden', category='error')
+                else:
+                    usuario.password = generate_password_hash(nueva_contraseña1, method='sha256')
+                    db.session.commit()
+                    flash(f'Se cambio la contraseña correctamente {usuario.nombre} :)', category='succes')
+                
+        # Redirige a la misma página para evitar problemas de recarga de página
+        return redirect(url_for('perfil'))
+
+    # Si la solicitud es GET, simplemente renderiza la plantilla
+    return render_template('perfil.html', usuario=usuario)
+
+
 # Desconectar sesion
 @app.route('/logout', methods = ['GET', 'POST'])
 @login_required
@@ -368,4 +417,4 @@ def editar_ahorro(id_ahorro):
 
 # BREAKPOINT #
 if __name__ == "__main__":
-    app.run(debug=True, port='9000')
+    app.run(debug=True, port='9000', host='0.0.0.0')
